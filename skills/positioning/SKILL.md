@@ -41,7 +41,27 @@ Questions:
 
 ### PHASE 2: Competitive research
 
-**Action:** Launch 2 parallel research agents using the Agent tool. Use `WebSearch` and `WebFetch` within each agent to gather competitive intelligence.
+**Action:** Before launching research, detect available research tools by calling `ListMcpResourcesTool` or checking which MCP tools are available. Build a tool instruction block based on what's present.
+
+**Tool detection priority (check in order, use all that are available):**
+
+| MCP Tool Pattern | What it provides | How to use |
+|---|---|---|
+| `mcp__perplexity__perplexity_research` | Deep multi-source research | Use for the primary competitive landscape query |
+| `mcp__perplexity__perplexity_search` | Fast web-grounded search | Use for quick competitor lookups |
+| `mcp__exa__web_search_exa` | Semantic web search | Use for finding similar/adjacent companies |
+| `mcp__parallel-search__web_search_preview` | Parallel web search | Use for batch competitor searches |
+| `mcp__parallel-task__createDeepResearch` | Analyst-grade research reports | Use for deep competitor analysis |
+| `mcp__firecrawl__firecrawl_search` | Web search + scraping | Use for competitor website analysis |
+| `WebSearch` (built-in) | Basic web search | Always available as fallback |
+| `WebFetch` (built-in) | Fetch URL content | Always available as fallback |
+
+**Compose the research tool instructions dynamically.** For example:
+- If Perplexity is available: "Use `mcp__perplexity__perplexity_research` for the main competitive landscape query, then `WebFetch` to verify specific competitor websites."
+- If Exa is available: "Use `mcp__exa__web_search_exa` for semantic search to find companies similar to [description]."
+- If nothing extra is available: "Use `WebSearch` for competitor queries and `WebFetch` on each competitor's website."
+
+**Launch 2 parallel agents with the detected tools:**
 
 **Agent 1: Direct competitors**
 ```
@@ -49,7 +69,7 @@ Launch an Agent (general-purpose) with this prompt:
 
 Research the competitive landscape for: [company description from Phase 1].
 
-Use WebSearch to find competitors. For each competitor, use WebFetch on their website to verify claims.
+[INSERT DETECTED TOOL INSTRUCTIONS — tell the agent exactly which tools to use]
 
 Find:
 1. The 3-5 closest competitors (same customer, same problem)
@@ -66,7 +86,7 @@ Launch an Agent (general-purpose) with this prompt:
 
 Research companies adjacent to: [company description from Phase 1].
 
-Use WebSearch to find adjacent and aspirational companies.
+[INSERT DETECTED TOOL INSTRUCTIONS]
 
 Find:
 1. 2-3 companies solving a related problem for the same customer
@@ -76,7 +96,7 @@ Find:
 For each: one-liner, why they matter as context.
 ```
 
-**Note:** Launch both agents in parallel. They use built-in WebSearch/WebFetch — no additional MCP servers required.
+**Launch both agents in parallel.** The skill works with just built-in WebSearch/WebFetch but produces richer research when Perplexity, Exa, or other research MCPs are configured.
 
 **After agents return:** Present findings to user as a compact summary. Ask:
 
