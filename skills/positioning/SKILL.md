@@ -41,36 +41,42 @@ Questions:
 
 ### PHASE 2: Competitive research
 
-**Action:** Launch 2 parallel research agents.
+**Action:** Launch 2 parallel research agents using the Agent tool. Use `WebSearch` and `WebFetch` within each agent to gather competitive intelligence.
 
 **Agent 1: Direct competitors**
 ```
-subagent_type: market-researcher
-prompt: |
-  Research the competitive landscape for: [company description from Phase 1].
+Launch an Agent (general-purpose) with this prompt:
 
-  Find:
-  1. The 3-5 closest competitors (same customer, same problem)
-  2. For each: one-liner positioning, pricing, key differentiator, weakness
-  3. What do ALL of them say? (common claims = table stakes, not differentiators)
-  4. What does NONE of them say? (potential white space)
+Research the competitive landscape for: [company description from Phase 1].
 
-  Output as a markdown table + 3 bullet summary.
+Use WebSearch to find competitors. For each competitor, use WebFetch on their website to verify claims.
+
+Find:
+1. The 3-5 closest competitors (same customer, same problem)
+2. For each: one-liner positioning, pricing, key differentiator, weakness
+3. What do ALL of them say? (common claims = table stakes, not differentiators)
+4. What does NONE of them say? (potential white space)
+
+Output as a markdown table + 3 bullet summary.
 ```
 
 **Agent 2: Adjacent/aspirational competitors**
 ```
-subagent_type: company-researcher
-prompt: |
-  Research companies adjacent to: [company description from Phase 1].
+Launch an Agent (general-purpose) with this prompt:
 
-  Find:
-  1. 2-3 companies solving a related problem for the same customer
-  2. 2-3 companies solving the same problem for a different customer
-  3. Any company that this team might secretly aspire to be (the "we're like X but for Y" reference)
+Research companies adjacent to: [company description from Phase 1].
 
-  For each: one-liner, why they matter as context.
+Use WebSearch to find adjacent and aspirational companies.
+
+Find:
+1. 2-3 companies solving a related problem for the same customer
+2. 2-3 companies solving the same problem for a different customer
+3. Any company that this team might secretly aspire to be (the "we're like X but for Y" reference)
+
+For each: one-liner, why they matter as context.
 ```
+
+**Note:** Launch both agents in parallel. They use built-in WebSearch/WebFetch — no additional MCP servers required.
 
 **After agents return:** Present findings to user as a compact summary. Ask:
 
