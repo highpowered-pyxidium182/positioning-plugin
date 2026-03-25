@@ -29,14 +29,10 @@ The output is a strategic alignment tool, not marketing copy.
 
 ## Install
 
-### From GitHub
+### From GitHub (recommended)
 
-```bash
-# Add the marketplace (if published to one)
-/plugin marketplace add owner/marketplace-repo
-
-# Or install directly
-/plugin install positioning
+```
+/plugin install Gerstep/positioning-plugin
 ```
 
 ### Local testing
@@ -45,15 +41,13 @@ The output is a strategic alignment tool, not marketing copy.
 claude --plugin-dir /path/to/positioning-plugin
 ```
 
-Then invoke with:
-
-```
-/positioning:positioning
-```
-
 ### Manual install
 
-Clone or copy to `~/.claude/plugins/positioning-plugin/`, then restart Claude Code.
+Clone to `~/.claude/plugins/positioning-plugin/`, then restart Claude Code.
+
+```bash
+git clone https://github.com/Gerstep/positioning-plugin ~/.claude/plugins/positioning-plugin
+```
 
 ## Usage
 
